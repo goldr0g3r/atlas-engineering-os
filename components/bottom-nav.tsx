@@ -1,10 +1,1 @@
-"use client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Beaker, Boxes, ClipboardList, LayoutDashboard, Library } from "lucide-react";
-
-const links = [["/dashboard","Home",LayoutDashboard],["/projects","Projects",ClipboardList],["/bom","BOM",Boxes],["/research","Research",Library],["/experiments","Exp",Beaker]] as const;
-export function BottomNav() {
-  const path=usePathname();
-  return <nav aria-label="Primary navigation" className="fixed bottom-0 left-0 right-0 z-30 border-t border-white/10 bg-atlas-panel/95 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur lg:hidden"><div className="grid grid-cols-5 gap-1">{links.map(([href,label,Icon]) => <Link key={href} href={href} aria-current={path===href?"page":undefined} className={`flex min-h-14 flex-col items-center justify-center rounded-xl text-[11px] ${path===href?"bg-white/10 text-atlas-accent":"text-slate-400"}`}><Icon className="mb-1 h-5 w-5" />{label}</Link>)}</div></nav>;
-}
+"use client";import Link from"next/link";import{usePathname}from"next/navigation";import{LayoutDashboard,FolderKanban,Plus,Boxes,Menu}from"lucide-react";const links=[["/dashboard","Home",LayoutDashboard],["/projects","Projects",FolderKanban],["/quick","Add",Plus],["/bom","BOM",Boxes],["/settings","More",Menu]] as const;export function BottomNav(){const p=usePathname();return <nav className="fixed inset-x-3 bottom-3 z-50 mx-auto flex max-w-md items-center justify-around rounded-[24px] border border-white/80 bg-white/90 p-2 shadow-2xl backdrop-blur lg:hidden">{links.map(([href,label,Icon])=><Link key={href} href={href} className={`flex min-w-14 flex-col items-center gap-1 rounded-2xl px-2 py-2 text-[10px] ${p.startsWith(href)?"bg-[#123b3a] text-white":"text-slate-500"}`}><Icon className="h-5 w-5"/><span>{label}</span></Link>)}</nav>}
