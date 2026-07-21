@@ -1,0 +1,3 @@
+export function BlockSkeleton({className="h-24"}:{className?:string}){return <div aria-hidden="true" className={`${className} animate-pulse rounded-2xl bg-white/10`}/>}
+export function ProjectHeaderSkeleton(){return <div className="space-y-3" aria-label="Loading project"><BlockSkeleton className="h-12"/><BlockSkeleton className="h-20"/><div className="flex gap-2"><BlockSkeleton className="h-12 w-28"/><BlockSkeleton className="h-12 w-24"/><BlockSkeleton className="h-12 w-24"/></div></div>}
+export function PageSkeleton(){return <div className="space-y-4" aria-label="Loading content"><BlockSkeleton className="h-32"/><div className="grid gap-3 md:grid-cols-2"><BlockSkeleton/><BlockSkeleton/><BlockSkeleton/><BlockSkeleton/></div></div>}
