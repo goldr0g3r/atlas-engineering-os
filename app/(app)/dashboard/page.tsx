@@ -1,2 +1,2 @@
 import { redirect } from "next/navigation";
-export default function DashboardRedirect() { redirect("/projects"); }
+export default function LegacyDashboard(){redirect("/projects")}
