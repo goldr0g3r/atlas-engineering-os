@@ -1,0 +1,3 @@
+"use client";
+import { usePathname,useRouter } from "next/navigation";
+export function ProjectSwitcher({projects,currentId}:{projects:{_id:string;name:string}[];currentId?:string}){const router=useRouter();const pathname=usePathname();return <label className="block"><span className="sr-only">Current project</span><select aria-label="Current project" value={currentId??""} onChange={e=>{const id=e.target.value;if(!id)return;const suffix=pathname.match(/^\/projects\/[^/]+(\/.*)?$/)?.[1]??"";router.push(`/projects/${id}${suffix}`)}} className="min-h-12 w-full rounded-xl border border-white/10 bg-atlas-panel2 px-3"><option value="">Select project</option>{projects.map(p=><option key={p._id} value={p._id}>{p.name}</option>)}</select></label>}

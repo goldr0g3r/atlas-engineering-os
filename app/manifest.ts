@@ -1,13 +1,2 @@
 import type { MetadataRoute } from "next";
-
-export default function manifest(): MetadataRoute.Manifest {
-  return {
-    name: "Atlas Engineering OS",
-    short_name: "Atlas",
-    description: "Mobile-first personal engineering workspace.",
-    start_url: "/dashboard",
-    display: "standalone",
-    background_color: "#08111f",
-    theme_color: "#08111f"
-  };
-}
+export default function manifest():MetadataRoute.Manifest{return{id:"/",name:"Atlas Engineering OS",short_name:"Atlas",description:"Project-centred engineering workspace.",start_url:"/dashboard",scope:"/",display:"standalone",background_color:"#08111f",theme_color:"#08111f",orientation:"any",categories:["productivity","business","utilities"],icons:[{src:"/icons/atlas-192.png",sizes:"192x192",type:"image/png",purpose:"any"},{src:"/icons/atlas-512.png",sizes:"512x512",type:"image/png",purpose:"any"},{src:"/icons/atlas-maskable-512.png",sizes:"512x512",type:"image/png",purpose:"maskable"}]}}

@@ -1,18 +1,4 @@
-import type { Metadata, Viewport } from "next";
-import "./globals.css";
-
-export const metadata: Metadata = {
-  title: "Atlas Engineering OS",
-  description: "Mobile-first personal engineering workspace.",
-  applicationName: "Atlas"
-};
-
-export const viewport: Viewport = {
-  themeColor: "#08111f",
-  width: "device-width",
-  initialScale: 1
-};
-
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body>{children}</body></html>;
-}
+import type { Metadata,Viewport } from "next";import{PwaManager}from"@/components/pwa-manager";import"./globals.css";
+export const metadata:Metadata={title:"Atlas Engineering OS",description:"Mobile-first project-centred engineering workspace.",applicationName:"Atlas",manifest:"/manifest.webmanifest",appleWebApp:{capable:true,title:"Atlas",statusBarStyle:"black-translucent"},icons:{icon:[{url:"/icons/atlas-192.png",sizes:"192x192",type:"image/png"},{url:"/icons/atlas-512.png",sizes:"512x512",type:"image/png"}],apple:[{url:"/icons/atlas-192.png",sizes:"192x192",type:"image/png"}]}};
+export const viewport:Viewport={themeColor:"#08111f",width:"device-width",initialScale:1,viewportFit:"cover"};
+export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="en"><body>{children}<PwaManager/></body></html>}

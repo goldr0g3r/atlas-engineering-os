@@ -1,9 +1,2 @@
 import { NextResponse } from "next/server";
-
-export function routeError(error: unknown) {
-  if (error instanceof Error && error.message === "UNAUTHORIZED") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  console.error(error);
-  return NextResponse.json({ error: "Unexpected server error." }, { status: 500 });
-}
+export function routeError(error:unknown){if(error instanceof Error){if(error.message==="UNAUTHORIZED")return NextResponse.json({error:"Unauthorized"},{status:401});if(error.message==="PROJECT_NOT_FOUND"||error.message==="RESOURCE_NOT_FOUND")return NextResponse.json({error:"Not found"},{status:404});if(error.message.startsWith("INVALID_"))return NextResponse.json({error:"Invalid identifier"},{status:400});}console.error(error);return NextResponse.json({error:"Unexpected server error."},{status:500});}
