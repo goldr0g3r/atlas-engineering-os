@@ -1,0 +1,5 @@
+export type SourceOffer={_id?:unknown;bomItemId:string;supplier:string;supplierSku:string;manufacturerPartNumber:string;unitPrice:number;currency:string;minimumOrderQuantity:number;packQuantity:number;availableQuantity:number;leadTimeDays:number;sourceUrl:string;preferred:boolean;status:string;validUntil:string};
+export function finiteNumber(value:unknown,fallback=0){const n=Number(value);return Number.isFinite(n)?n:fallback}
+export function effectiveOrderQuantity(required:number,minimum:number,pack:number){const base=Math.max(required,minimum,0);const size=Math.max(pack,1);return Math.ceil(base/size)*size}
+export function offerExtendedCost(required:number,offer:SourceOffer){return effectiveOrderQuantity(required,offer.minimumOrderQuantity,offer.packQuantity)*finiteNumber(offer.unitPrice)}
+export function selectCostSource(offers:SourceOffer[]){const active=offers.filter(o=>o.status!=="inactive"&&finiteNumber(o.unitPrice)>=0);return active.find(o=>o.preferred)??active.sort((a,b)=>finiteNumber(a.unitPrice)-finiteNumber(b.unitPrice))[0]}
