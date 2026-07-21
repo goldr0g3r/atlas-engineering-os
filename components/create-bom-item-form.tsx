@@ -1,12 +1,76 @@
 "use client";
-import { Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { Modal } from "@/components/modal";
 
-const field="min-h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-teal-500 focus:bg-white focus:ring-4 focus:ring-teal-500/10 dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-teal-400 dark:focus:bg-white/[0.07]";
-export function CreateBomItemForm({projectId,bomId}:{projectId:string;bomId:string}){
- const router=useRouter();const[open,setOpen]=useState(false);const[error,setError]=useState("");const[saving,setSaving]=useState(false);
- async function submit(event:React.FormEvent<HTMLFormElement>){event.preventDefault();const form=event.currentTarget;setSaving(true);setError("");try{const response=await fetch(`/api/projects/${projectId}/boms/${bomId}/items`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.fromEntries(new FormData(form)))});const body=await response.json().catch(()=>({}));if(!response.ok)throw new Error(body.error??"Unable to add BOM item");form.reset();setOpen(false);router.refresh()}catch(value){setError(value instanceof Error?value.message:"Unable to add BOM item")}finally{setSaving(false)}}
- return <><div className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-[#101b2d] sm:flex-row sm:items-center sm:justify-between"><div><h3 className="font-semibold text-slate-950 dark:text-white">BOM entries</h3><p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Add components, supplier details, quantities and estimated cost.</p></div><button type="button" onClick={()=>setOpen(true)} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-teal-600 px-5 font-semibold text-white shadow-sm transition hover:bg-teal-700 focus:outline-none focus:ring-4 focus:ring-teal-500/20"><Plus className="size-5"/>Add BOM item</button></div><Modal open={open} onClose={()=>!saving&&setOpen(false)} title="Add BOM item" description="Create a component entry in this BOM."><form onSubmit={submit} className="grid gap-4"><div className="grid gap-4 sm:grid-cols-2"><label className="grid gap-1.5 text-sm font-medium">Part name<input className={field} name="partName" required maxLength={160} autoFocus placeholder="e.g. STM32 Nucleo-144"/></label><label className="grid gap-1.5 text-sm font-medium">Part number<input className={field} name="partNumber" maxLength={120} placeholder="Manufacturer part number"/></label><label className="grid gap-1.5 text-sm font-medium">Manufacturer<input className={field} name="manufacturer" maxLength={120} placeholder="Manufacturer"/></label><label className="grid gap-1.5 text-sm font-medium">Supplier<input className={field} name="supplier" maxLength={120} placeholder="Supplier"/></label><label className="grid gap-1.5 text-sm font-medium">Quantity<input className={field} name="quantity" type="number" min="0" step="any" defaultValue="1" required/></label><label className="grid gap-1.5 text-sm font-medium">Unit<input className={field} name="unit" defaultValue="pcs" maxLength={20}/></label><label className="grid gap-1.5 text-sm font-medium">Unit cost<input className={field} name="unitCost" type="number" min="0" step="0.01" placeholder="0.00"/></label><label className="grid gap-1.5 text-sm font-medium">Currency<input className={field} name="currency" defaultValue="INR" maxLength={3}/></label><label className="grid gap-1.5 text-sm font-medium sm:col-span-2">Supplier link<input className={field} name="link" type="url" placeholder="https://..."/></label></div>{error&&<p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-300">{error}</p>}<footer className="flex flex-col-reverse gap-3 border-t border-slate-200 pt-4 dark:border-white/10 sm:flex-row sm:justify-end"><button type="button" disabled={saving} onClick={()=>setOpen(false)} className="min-h-11 rounded-xl border border-slate-200 px-5 font-medium hover:bg-slate-50 disabled:opacity-50 dark:border-white/10 dark:hover:bg-white/5">Cancel</button><button disabled={saving} className="min-h-11 rounded-xl bg-teal-600 px-5 font-semibold text-white hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-60">{saving?"Adding item...":"Add item"}</button></footer></form></Modal></>
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Plus, X } from "lucide-react";
+
+export function CreateBomItemForm({ projectId, bomId }: { projectId: string; bomId: string }) {
+  const [open, setOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const firstField = useRef<HTMLInputElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!open) return;
+    firstField.current?.focus();
+    document.body.style.overflow = "hidden";
+    const key = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && !saving) setOpen(false);
+    };
+    document.addEventListener("keydown", key);
+    return () => {
+      document.removeEventListener("keydown", key);
+      document.body.style.overflow = "";
+      trigger.current?.focus();
+    };
+  }, [open, saving]);
+
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSaving(true);
+    setError("");
+    const form = event.currentTarget;
+    try {
+      const response = await fetch(`/api/projects/${projectId}/boms/${bomId}/items`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(Object.fromEntries(new FormData(form))),
+      });
+      const body = await response.json();
+      if (!response.ok) throw new Error(body.error ?? "Unable to add BOM item");
+      form.reset();
+      setOpen(false);
+      router.refresh();
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "Unable to add BOM item");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <>
+      <button ref={trigger} type="button" onClick={() => setOpen(true)} className="atlas-button-primary" aria-haspopup="dialog">
+        <Plus className="h-4 w-4" /> Add BOM item
+      </button>
+      {open && (
+        <div className="fixed inset-0 z-[110] bg-slate-950/35 p-3 backdrop-blur-sm sm:p-6" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget && !saving) setOpen(false); }}>
+          <aside role="dialog" aria-modal="true" aria-labelledby="bom-item-heading" className="ml-auto h-full w-full max-w-xl overflow-y-auto rounded-[24px] border border-atlas-line bg-white p-5 shadow-2xl sm:p-7">
+            <header className="mb-6 flex items-start justify-between gap-4">
+              <div><p className="text-sm text-atlas-muted">Component requirement</p><h2 id="bom-item-heading" className="text-2xl font-semibold">Add BOM item</h2></div>
+              <button type="button" disabled={saving} onClick={() => setOpen(false)} className="grid h-10 w-10 place-items-center rounded-full border border-atlas-line bg-atlas-panel2" aria-label="Close"><X className="h-4 w-4" /></button>
+            </header>
+            <form onSubmit={submit} className="space-y-5">
+              <section className="space-y-4"><h3 className="text-sm font-semibold">Part details</h3><label className="block text-sm font-medium">Part name<input ref={firstField} name="partName" required maxLength={160} className="atlas-field mt-1" /></label><div className="grid gap-4 sm:grid-cols-2"><label className="block text-sm font-medium">Part number<input name="partNumber" maxLength={120} className="atlas-field mt-1" /></label><label className="block text-sm font-medium">Manufacturer<input name="manufacturer" maxLength={120} className="atlas-field mt-1" /></label><label className="block text-sm font-medium">Quantity<input name="quantity" required type="number" min="0.0001" step="any" defaultValue="1" className="atlas-field mt-1" /></label><label className="block text-sm font-medium">Unit<input name="unit" required maxLength={20} defaultValue="pcs" className="atlas-field mt-1" /></label></div><label className="block text-sm font-medium">Notes<textarea name="notes" rows={3} maxLength={2000} className="atlas-field mt-1" /></label></section>
+              <details className="rounded-[18px] border border-atlas-line bg-atlas-panel2/60 p-4"><summary className="cursor-pointer text-sm font-semibold">Initial sourcing details</summary><div className="mt-4 grid gap-4 sm:grid-cols-2"><label className="block text-sm font-medium">Supplier<input name="supplier" maxLength={120} className="atlas-field mt-1" /></label><label className="block text-sm font-medium">Unit cost<input name="unitCost" type="number" min="0" step="0.0001" className="atlas-field mt-1" /></label><label className="block text-sm font-medium">Currency<input name="currency" defaultValue="INR" maxLength={3} className="atlas-field mt-1" /></label><label className="block text-sm font-medium">Supplier URL<input name="link" type="url" className="atlas-field mt-1" /></label></div></details>
+              {error && <p role="alert" className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700">{error}</p>}
+              <footer className="sticky bottom-0 flex flex-col-reverse gap-3 border-t border-atlas-line bg-white pt-4 sm:flex-row sm:justify-end"><button type="button" disabled={saving} onClick={() => setOpen(false)} className="atlas-button-secondary sm:min-w-28">Cancel</button><button disabled={saving} className="atlas-button-primary sm:min-w-36 disabled:opacity-60">{saving ? "Adding..." : "Add item"}</button></footer>
+            </form>
+          </aside>
+        </div>
+      )}
+    </>
+  );
 }
