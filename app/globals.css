@@ -105,3 +105,27 @@ main input::placeholder, main textarea::placeholder,
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+
+/* Atlas layout normalization: append to app/globals.css */
+html, body { width: 100%; min-height: 100%; }
+body { overflow-x: hidden; }
+.atlas-shell {
+  width: 100%;
+  max-width: none;
+  min-height: 100dvh;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.atlas-card,
+.atlas-field,
+.atlas-button-primary,
+.atlas-button-secondary,
+.atlas-chip { border-width: 1px; }
+.atlas-card { border-color: var(--atlas-line); }
+.atlas-field { min-height: 44px; }
+@media (min-width: 1024px) {
+  .atlas-shell { min-height: 100dvh; }
+}
