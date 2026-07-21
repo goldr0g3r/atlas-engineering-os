@@ -1,0 +1,1 @@
+export type AtlasNotification={id:string;title:string;description:string;href:string;severity:"info"|"warning"|"critical";date?:string};export const isDone=(v:unknown)=>["done","completed","closed","paid"].includes(String(v??"").toLowerCase());export const iso=(v:unknown)=>typeof v==="string"&&/^\d{4}-\d{2}-\d{2}/.test(v)?v.slice(0,10):"";

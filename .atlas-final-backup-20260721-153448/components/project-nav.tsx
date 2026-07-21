@@ -1,0 +1,3 @@
+import Link from "next/link";
+const links = [["","Overview"],["tasks","Tasks"],["milestones","Milestones"],["boms","BOMs"],["finances","Costs"],["risks","Risks"],["research","Research"],["notes","Notes"],["links","Links & docs"],["experiments","Experiments"]] as const;
+export function ProjectNav({ projectId }: { projectId: string }) { return <nav className="scrollbar-none flex gap-2 overflow-x-auto pb-1" aria-label="Project workspace">{links.map(([path,label]) => <Link className="atlas-chip whitespace-nowrap rounded-full px-4 py-2 text-sm transition hover:border-[#123b3a]" key={path} href={`/projects/${projectId}${path ? `/${path}` : ""}`}>{label}</Link>)}</nav>; }
