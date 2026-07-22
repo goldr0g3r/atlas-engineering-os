@@ -129,3 +129,10 @@ body { overflow-x: hidden; }
 @media (min-width: 1024px) {
   .atlas-shell { min-height: 100dvh; }
 }
+/* Atlas shell and alignment correction */
+:root { --atlas-line: #d8e3e7; --atlas-muted: #647584; --atlas-ink: #17212b; }
+body { background: #f3f7f8; }
+.atlas-field { border-color: var(--atlas-line); background: #f7fafb; }
+.atlas-card { border: 1px solid var(--atlas-line); background: rgba(255,255,255,.92); }
+.atlas-button-primary { min-height: 44px; border: 1px solid #123b3a; background: #123b3a; padding-inline: 18px; }
+.atlas-button-secondary { min-height: 44px; border: 1px solid var(--atlas-line); background: #fff; padding-inline: 18px; }

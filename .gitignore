@@ -12,3 +12,6 @@ node_modules
 
 # Atlas local installer backups
 /.atlas-*-backup-*/
+
+# Atlas local installer backups
+/.atlas-*-backup-*/
