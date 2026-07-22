@@ -1,0 +1,1 @@
+import{ProjectModulePage}from"@/components/project-module-page";export const dynamic="force-dynamic";export default async function Page({params}:{params:Promise<{projectId:string}>}){const{projectId}=await params;return <ProjectModulePage projectId={projectId} kind="work-items" title="Board" description="Work items grouped by delivery status."/>}

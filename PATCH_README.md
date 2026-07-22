@@ -1,12 +1,5 @@
-# Atlas project-centric patch
+# Atlas empty modules complete patch
 
-This overlay converts Atlas from independent category lists into a project-centred workspace.
+Adds real pages for the empty project folders shown in the supplied tree: activity, backlog, board, budgets, costs, finances, milestones, risks, roadmap, settings and table. It also adds explicit project APIs for milestones, risks, costs, budgets and work items.
 
-## Apply
-
-1. Commit or stash the existing repository.
-2. Copy this overlay into the repository root, preserving paths.
-3. Run `npm install`, `npm run typecheck`, and `npm run build`.
-4. Start with `npm run dev` and create a project.
-
-No secrets are included. Existing collections are not deleted. Existing unassigned records remain available to a later migration.
+This overlay assumes the existing Atlas helpers already present in the project-centric codebase: `requireUserId`, `getCollection`, `requireProject`, `routeError`, `nowIso`, and `serialize`.
