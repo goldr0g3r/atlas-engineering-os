@@ -136,3 +136,23 @@ body { background: #f3f7f8; }
 .atlas-card { border: 1px solid var(--atlas-line); background: rgba(255,255,255,.92); }
 .atlas-button-primary { min-height: 44px; border: 1px solid #123b3a; background: #123b3a; padding-inline: 18px; }
 .atlas-button-secondary { min-height: 44px; border: 1px solid var(--atlas-line); background: #fff; padding-inline: 18px; }
+
+
+/* Atlas sidebar theme correction */
+:root {
+  --atlas-sidebar: #0d2030;
+  --atlas-sidebar-border: #203546;
+  --atlas-sidebar-active: #153b3a;
+  --atlas-sidebar-accent: #69e5d2;
+}
+.atlas-sidebar {
+  color-scheme: dark;
+  isolation: isolate;
+}
+.atlas-sidebar a,
+.atlas-sidebar button {
+  text-decoration: none;
+}
+.atlas-sidebar * {
+  border-color: inherit;
+}
