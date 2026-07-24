@@ -7,15 +7,15 @@ import {
   FolderKanban,
   Layers3,
   PanelLeftClose,
+  Settings,
 } from "lucide-react";
 
 const navigation = [
-  {
-    href: "/projects",
-    label: "Projects",
-    description: "Project workspaces",
-    icon: FolderKanban,
-  },
+  { href: "/projects", label: "Projects", description: "Project workspaces", icon: FolderKanban },
+] as const;
+
+const bottomLinks = [
+  { href: "/settings", label: "Settings", description: "Preferences & account", icon: Settings },
 ] as const;
 
 export function Sidebar() {
@@ -89,16 +89,35 @@ export function Sidebar() {
       </div>
 
       <div className="shrink-0 border-t border-white/10 p-4">
-        <div className="rounded-[16px] border border-white/10 bg-white/[0.035] p-3.5">
-          <div className="flex items-start gap-3">
-            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-[#143432] text-[#69e5d2]">
-              <PanelLeftClose className="h-4 w-4" />
-            </span>
-            <p className="text-[11px] leading-[1.55] text-slate-400">
-              Project workspaces keep tasks, milestones, BOMs, costs, risks, and engineering knowledge connected.
-            </p>
-          </div>
-        </div>
+        <nav className="space-y-1.5">
+          {bottomLinks.map(({ href, label, description, icon: Icon }) => {
+            const active = pathname === href || pathname.startsWith(`${href}/`);
+            return (
+              <Link
+                key={href}
+                href={href}
+                aria-current={active ? "page" : undefined}
+                className={`group flex min-h-[44px] items-center gap-3 rounded-[14px] border px-3 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#69e5d2] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d2030] ${
+                  active
+                    ? "border-[#2a615b] bg-[#153b3a] text-white"
+                    : "border-transparent text-slate-300 hover:border-white/10 hover:bg-white/[0.06] hover:text-white"
+                }`}
+              >
+                <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-lg border transition ${
+                  active ? "border-[#31756d] bg-[#1a4c49] text-[#78ead8]" : "border-white/10 bg-white/[0.04] text-slate-400"
+                }`}>
+                  <Icon className="h-[16px] w-[16px]" />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-sm font-semibold leading-5">{label}</span>
+                  <span className={`block truncate text-[11px] leading-4 ${
+                    active ? "text-[#a7d8d1]" : "text-slate-500"
+                  }`}>{description}</span>
+                </span>
+              </Link>
+            );
+          })}
+        </nav>
       </div>
     </aside>
   );

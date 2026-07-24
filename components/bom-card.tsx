@@ -1,0 +1,5 @@
+"use client";
+import Link from"next/link";import{useRouter}from"next/navigation";import{useState}from"react";import{CreateBomForm}from"@/components/create-bom-form";import{EditDeleteActions}from"@/components/edit-delete-actions";
+export function BomCard({bom,projectId}:{bom:any;projectId:string}){const router=useRouter();const[editing,setEditing]=useState(false);
+if(editing)return<div className="rounded-2xl bg-atlas-panel p-5"><CreateBomForm projectId={projectId} bom={bom} onClose={()=>setEditing(false)}/></div>;
+return<Link href={`/projects/${projectId}/boms/${bom._id}`} key={bom._id} className="rounded-2xl bg-atlas-panel p-5 block"><div className="flex items-start justify-between"><h2 className="text-xl font-semibold">{bom.name}</h2><span onClick={e=>e.preventDefault()}><EditDeleteActions onEdit={()=>setEditing(true)} onDelete={async()=>{await fetch(`/api/projects/${projectId}/boms/${bom._id}`,{method:"DELETE"});router.refresh()}} label={bom.name}/></span></div><p className="text-slate-400">Revision {bom.revision||"-"} · {bom.status}</p></Link>}
